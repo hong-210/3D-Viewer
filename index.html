@@ -11,58 +11,27 @@
 </head>
 <body>
     <script type="module">
-        // Three.js 및 FBXLoader ES Modules 가져오기
         import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.module.js';
         import { FBXLoader } from 'https://cdn.jsdelivr.net/npm/three@0.153.0/examples/jsm/loaders/FBXLoader.js';
 
-        // 씬 설정
         const scene = new THREE.Scene();
-
-        // 카메라 설정
-        const camera = new THREE.PerspectiveCamera(
-            75, 
-            window.innerWidth / window.innerHeight, 
-            0.1, 
-            1000
-        );
-        camera.position.set(0, 1, 5); // 카메라 위치
-
-        // 렌더러 설정
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // 조명 추가
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(1, 1, 1).normalize();
-        scene.add(directionalLight);
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(1, 1, 1).normalize();
+        scene.add(light);
 
-        const ambientLight = new THREE.AmbientLight(0x404040); // 부드러운 조명
-        scene.add(ambientLight);
-
-        // FBX 모델 로드
         const loader = new FBXLoader();
-        loader.load(
-            'model/TEST.fbx', // FBX 파일 경로
-            (object) => {
-                scene.add(object); // 모델을 씬에 추가
-            },
-            (xhr) => {
-                console.log((xhr.loaded / xhr.total * 100) + '% loaded'); // 로드 진행률 출력
-            },
-            (error) => {
-                console.error('An error occurred:', error); // 오류 처리
-            }
-        );
-
-        // 화면 크기 변화에 따라 렌더러 크기 조정
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+        loader.load('model/TEST.fbx', (object) => {
+            scene.add(object);
+        }, undefined, (error) => {
+            console.error('An error occurred:', error);
         });
 
-        // 애니메이션 루프
+        camera.position.z = 5;
         function animate() {
             requestAnimationFrame(animate);
             renderer.render(scene, camera);
