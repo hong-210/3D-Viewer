@@ -2,20 +2,26 @@
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
-
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// GLTF 모델 로드
-const loader = new THREE.GLTFLoader();
+// 빛 추가
+const light = new THREE.DirectionalLight(0xffffff);
+light.position.set(1, 1, 1).normalize();
+scene.add(light);
+
+// FBX 로더
+const loader = new THREE.FBXLoader();
 loader.load(
-    'model/your_model.gltf', // 여기에 자신의 모델 파일 경로를 입력하세요
-    (gltf) => {
-        scene.add(gltf.scene);
+    'model/your_model.fbx', // FBX 파일 경로 (model 폴더에 넣는 것을 추천)
+    (object) => {
+        scene.add(object); // 로드한 모델을 씬에 추가
     },
-    undefined,
+    (xhr) => {
+        console.log((xhr.loaded / xhr.total * 100) + '% loaded'); // 로드 진행률 출력
+    },
     (error) => {
-        console.error('An error occurred:', error);
+        console.error('An error occurred:', error); // 오류 처리
     }
 );
 
