@@ -13,7 +13,7 @@ scene.add(light);
 // FBX 로더
 const loader = new THREE.FBXLoader();
 loader.load(
-    'model/your_model.fbx', // FBX 파일 경로 (model 폴더에 넣는 것을 추천)
+    'model/TEST', // FBX 파일 경로 (model 폴더에 넣는 것을 추천)
     (object) => {
         scene.add(object); // 로드한 모델을 씬에 추가
     },
